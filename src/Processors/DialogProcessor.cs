@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Draw
 {
@@ -61,16 +62,31 @@ namespace Draw
 			rect.FillColor = Color.White;
 
 			ShapeList.Add(rect);
-		}
-		
-		/// <summary>
-		/// Проверява дали дадена точка е в елемента.
-		/// Обхожда в ред обратен на визуализацията с цел намиране на
-		/// "най-горния" елемент т.е. този който виждаме под мишката.
-		/// </summary>
-		/// <param name="point">Указана точка</param>
-		/// <returns>Елемента на изображението, на който принадлежи дадената точка.</returns>
-		public Shape ContainsPoint(PointF point)
+        }
+
+        public void AddRandomStar()
+        {
+			Random rnd = new Random();
+            float x = rnd.Next(100, 1000);
+            float y = rnd.Next(100, 600);
+			float size = 100;
+
+            StarShape star = new StarShape(new RectangleF(x, y, size, size))
+            {
+                FillColor = Color.LightYellow
+            };
+
+            ShapeList.Add(star);
+        }
+
+        /// <summary>
+        /// Проверява дали дадена точка е в елемента.
+        /// Обхожда в ред обратен на визуализацията с цел намиране на
+        /// "най-горния" елемент т.е. този който виждаме под мишката.
+        /// </summary>
+        /// <param name="point">Указана точка</param>
+        /// <returns>Елемента на изображението, на който принадлежи дадената точка.</returns>
+        public Shape ContainsPoint(PointF point)
 		{
 			for(int i = ShapeList.Count - 1; i >= 0; i--){
 				if (ShapeList[i].Contains(point)){

@@ -57,13 +57,21 @@ namespace Draw
 			viewPort.Invalidate();
 		}
 
-		/// <summary>
-		/// Прихващане на координатите при натискането на бутон на мишката и проверка (в обратен ред) дали не е
-		/// щракнато върху елемент. Ако е така то той се отбелязва като селектиран и започва процес на "влачене".
-		/// Промяна на статуса и инвалидиране на контрола, в който визуализираме.
-		/// Реализацията се диалогът с потребителя, при който се избира "най-горния" елемент от екрана.
-		/// </summary>
-		void ViewPortMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        void DrawStarSpeedButtonClick(object sender, EventArgs e)
+        {
+            dialogProcessor.AddRandomStar();
+
+            statusBar.Items[0].Text = "Последно действие: Рисуване на звезда";
+
+            viewPort.Invalidate();
+        }
+        /// <summary>
+        /// Прихващане на координатите при натискането на бутон на мишката и проверка (в обратен ред) дали не е
+        /// щракнато върху елемент. Ако е така то той се отбелязва като селектиран и започва процес на "влачене".
+        /// Промяна на статуса и инвалидиране на контрола, в който визуализираме.
+        /// Реализацията се диалогът с потребителя, при който се избира "най-горния" елемент от екрана.
+        /// </summary>
+        void ViewPortMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
 			if (pickUpSpeedButton.Checked) {
 				dialogProcessor.Selection = dialogProcessor.ContainsPoint(e.Location);
@@ -97,5 +105,5 @@ namespace Draw
 		{
 			dialogProcessor.IsDragging = false;
 		}
-	}
+    }
 }

@@ -17,7 +17,7 @@ namespace Draw
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
+			this.DoubleBuffered = true;
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
