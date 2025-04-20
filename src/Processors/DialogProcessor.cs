@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Draw.src.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Draw
@@ -79,6 +80,51 @@ namespace Draw
             ShapeList.Add(star);
         }
 
+        public void AddRandomElipse()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+            ElipseShape ellipse = new ElipseShape(new Rectangle(x, y, 100, 200))
+            {
+                FillColor = Color.Green,
+                BorderColor = Color.Black
+            };
+
+            ShapeList.Add(ellipse);
+        }
+
+        public void AddRandomTriangle()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+            TriangleShape triangle = new TriangleShape(new Rectangle(x, y, 100, 200))
+            {
+                FillColor = Color.LightBlue,
+                BorderColor = Color.Black
+            };
+
+            ShapeList.Add(triangle);
+        }
+
+        public void AddRandomTrapezoid()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+            TrapezoidShape trapezoid = new TrapezoidShape(new Rectangle(x, y, 100, 200))
+            {
+                FillColor = Color.Brown,
+                BorderColor = Color.Black
+            };
+
+            ShapeList.Add(trapezoid);
+        }
+
         /// <summary>
         /// Проверява дали дадена точка е в елемента.
         /// Обхожда в ред обратен на визуализацията с цел намиране на
@@ -90,7 +136,6 @@ namespace Draw
 		{
 			for(int i = ShapeList.Count - 1; i >= 0; i--){
 				if (ShapeList[i].Contains(point)){
-					ShapeList[i].FillColor = Color.Red;
 						
 					return ShapeList[i];
 				}	
@@ -109,5 +154,16 @@ namespace Draw
 				lastLocation = p;
 			}
 		}
-	}
+        /// <summary>
+        /// Променя цвета на контура на селектираната форма.
+        /// </summary>
+        /// <param name="color">Новият цвят на контура.</param>
+        public void SetBorderColor(Color color)
+        {
+            if (Selection != null)
+            {
+                Selection.BorderColor = color;
+            }
+        }
+    }
 }

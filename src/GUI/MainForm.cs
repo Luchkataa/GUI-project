@@ -105,5 +105,54 @@ namespace Draw
 		{
 			dialogProcessor.IsDragging = false;
 		}
+
+        private void Ellipse_Click(object sender, EventArgs e)
+        {
+            dialogProcessor.AddRandomElipse();
+
+            statusBar.Items[0].Text = "Последно действие: Рисуване на елипса";
+
+            viewPort.Invalidate();
+        }
+
+        private void Triangle_Click(object sender, EventArgs e)
+        {
+            dialogProcessor.AddRandomTriangle();
+
+            statusBar.Items[0].Text = "Последно действие: Рисуване на триъгълник";
+
+            viewPort.Invalidate();
+        }
+
+        private void Trapezoid_Click(object sender, EventArgs e)
+        {
+            dialogProcessor.AddRandomTrapezoid();
+
+            statusBar.Items[0].Text = "Последно действие: Рисуване на трапец";
+
+            viewPort.Invalidate();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e) //Color Picker
+        {
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (dialogProcessor.Selection != null)
+                {
+                    dialogProcessor.Selection.BorderColor = colorDialog1.Color;
+                    statusBar.Items[0].Text = "Последно действие: Промяна на цвета на фигурата";
+                    viewPort.Invalidate();
+                }
+            }
+        }
+
+        private void trackBarBorderWidth_Scroll(object sender, EventArgs e)
+        {
+            if (dialogProcessor.Selection != null)
+            {
+                dialogProcessor.Selection.BorderWidth = trackBarBorderWidth.Value;
+                viewPort.Invalidate();
+            }
+        }
     }
 }

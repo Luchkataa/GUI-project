@@ -21,14 +21,18 @@ namespace Draw
 
         public override void DrawSelf(Graphics grfx)
         {
-            using (SolidBrush brush = new SolidBrush(this.FillColor))
-            using (Pen pen = new Pen(Color.Black, 2))
+            base.DrawSelf(grfx);
+
+            PointF[] points = CalculateStarPoints(this.Rectangle); // however you generate them
+
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, FillColor)))
             {
-                PointF[] starPoints = CalculateStarPoints(Rectangle);
+                grfx.FillPolygon(brush, points);
+            }
 
-                grfx.FillPolygon(brush, starPoints);
-
-                grfx.DrawPolygon(pen, starPoints);
+            using (Pen borderPen = new Pen(BorderColor, BorderWidth))
+            {
+                grfx.DrawPolygon(borderPen, points);
             }
         }
 

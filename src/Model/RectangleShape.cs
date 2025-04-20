@@ -43,11 +43,17 @@ namespace Draw
 		/// </summary>
 		public override void DrawSelf(Graphics grfx)
 		{
-			base.DrawSelf(grfx);
-			
-			grfx.FillRectangle(new SolidBrush(FillColor),Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
-			grfx.DrawRectangle(Pens.Black,Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
-			
-		}
+            base.DrawSelf(grfx);
+
+            using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, FillColor)))
+            {
+                grfx.FillRectangle(brush, Rectangle);
+            }
+
+            using (Pen borderPen = new Pen(BorderColor, BorderWidth))
+            {
+                grfx.DrawRectangle(borderPen, System.Drawing.Rectangle.Round(Rectangle));
+            }
+        }
 	}
 }
