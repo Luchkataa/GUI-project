@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Draw.src.Model
 {
@@ -32,5 +33,26 @@ namespace Draw.src.Model
                 grfx.DrawPolygon(borderPen, points);
             }
         }
+
+        public override bool Contains(PointF point)
+        {
+            float topWidth = Width * 0.5f;
+            float bottomWidth = Width;
+
+            var points = new PointF[]
+            {
+                new PointF(Location.X + (Width - topWidth) / 2, Location.Y),
+                new PointF(Location.X + (Width + topWidth) / 2, Location.Y),
+                new PointF(Location.X + (Width + bottomWidth) / 2, Location.Y + Height),
+                new PointF(Location.X + (Width - bottomWidth) / 2, Location.Y + Height)
+            };
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddPolygon(points);
+                return path.IsVisible(point);
+            }
+        }
+
     }
 }

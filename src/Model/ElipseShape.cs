@@ -24,5 +24,18 @@ namespace Draw.src.Model
             }
         }
 
+        public override bool Contains(PointF point)
+        {
+            float a = Width / 2;   // Полу-голяма ос
+            float b = Height / 2;  // Полу-малка ос
+            float centerX = Location.X + a;
+            float centerY = Location.Y + b;
+
+            float normalizedX = (point.X - centerX) / a;
+            float normalizedY = (point.Y - centerY) / b;
+
+            return (normalizedX * normalizedX + normalizedY * normalizedY) <= 1;
+        }
+
     }
 }

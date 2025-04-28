@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,5 +36,20 @@ namespace Draw.src.Model
             }
         }
 
+        public override bool Contains(PointF point)
+        {
+            var points = new PointF[]
+            {
+                new PointF(Location.X + Width / 2, Location.Y),
+                new PointF(Location.X, Location.Y + Height),
+                new PointF(Location.X + Width, Location.Y + Height)
+            };
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddPolygon(points);
+                return path.IsVisible(point);
+            }
+        }
     }
 }
