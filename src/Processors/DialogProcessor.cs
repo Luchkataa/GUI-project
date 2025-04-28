@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using Draw.src.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
@@ -165,5 +166,27 @@ namespace Draw
                 Selection.BorderColor = color;
             }
         }
+
+
+        /// <summary>
+        /// Завъртане на примитива.
+        /// </summary>
+        public void Rotate(float angle)
+        {
+            if (Selection != null)
+            {
+                Matrix rotateMatrix = Selection.TransformMatrix.Clone();
+
+                PointF center = new PointF(
+                    Selection.Rectangle.Left + Selection.Rectangle.Width / 2,
+                    Selection.Rectangle.Top + Selection.Rectangle.Height / 2
+                );
+
+                rotateMatrix.RotateAt(angle, center);
+
+                Selection.TransformMatrix = rotateMatrix;
+            }
+        }
+
     }
 }

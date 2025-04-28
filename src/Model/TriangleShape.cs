@@ -18,12 +18,15 @@ namespace Draw.src.Model
         {
             base.DrawSelf(grfx);
 
-            var points = new PointF[]
-            {
-            new PointF(Location.X + Width / 2, Location.Y),
-            new PointF(Location.X, Location.Y + Height),
-            new PointF(Location.X + Width, Location.Y + Height)
-            };
+            GraphicsState state = grfx.Save();
+
+            grfx.MultiplyTransform(this.TransformMatrix);
+
+            PointF top = new PointF(Rectangle.Left + Rectangle.Width / 2, Rectangle.Top);
+            PointF left = new PointF(Rectangle.Left, Rectangle.Bottom);
+            PointF right = new PointF(Rectangle.Right, Rectangle.Bottom);
+
+            PointF[] points = { top, left, right };
 
             using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, FillColor)))
             {
@@ -34,6 +37,8 @@ namespace Draw.src.Model
             {
                 grfx.DrawPolygon(borderPen, points);
             }
+
+            grfx.Restore(state);
         }
 
         public override bool Contains(PointF point)

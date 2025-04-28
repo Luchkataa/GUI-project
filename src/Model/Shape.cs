@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Draw
 {
@@ -92,6 +93,16 @@ namespace Draw
         {
             get { return borderWidth; }
             set { borderWidth = value; }
+        }
+
+        /// <summary>
+        /// Въртене на примитив.
+        /// </summary>
+        private Matrix transformMatrix = new Matrix();
+        public virtual Matrix TransformMatrix
+        {
+            get { return transformMatrix; }
+            set { transformMatrix = value; }
         }
         #endregion
 

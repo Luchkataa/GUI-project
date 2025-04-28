@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Draw
 {
@@ -37,13 +38,17 @@ namespace Draw
 				// Ако не е в обхващащия правоъгълник, то неможе да е в обекта и => false
 				return false;
 		}
-		
-		/// <summary>
-		/// Частта, визуализираща конкретния примитив.
-		/// </summary>
-		public override void DrawSelf(Graphics grfx)
-		{
+
+        /// <summary>
+        /// Частта, визуализираща конкретния примитив.
+        /// </summary>
+        public override void DrawSelf(Graphics grfx)
+        {
             base.DrawSelf(grfx);
+
+            GraphicsState state = grfx.Save();
+
+            grfx.MultiplyTransform(this.TransformMatrix);
 
             using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, FillColor)))
             {
@@ -54,6 +59,8 @@ namespace Draw
             {
                 grfx.DrawRectangle(borderPen, System.Drawing.Rectangle.Round(Rectangle));
             }
+
+            grfx.Restore(state);
         }
-	}
+    }
 }

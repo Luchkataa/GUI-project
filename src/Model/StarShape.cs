@@ -23,7 +23,11 @@ namespace Draw
         {
             base.DrawSelf(grfx);
 
-            PointF[] points = CalculateStarPoints(this.Rectangle); // however you generate them
+            GraphicsState state = grfx.Save();
+
+            grfx.MultiplyTransform(this.TransformMatrix);
+
+            PointF[] points = CalculateStarPoints(Rectangle);
 
             using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, FillColor)))
             {
@@ -34,6 +38,8 @@ namespace Draw
             {
                 grfx.DrawPolygon(borderPen, points);
             }
+
+            grfx.Restore(state);
         }
 
         private PointF[] CalculateStarPoints(RectangleF bounds)

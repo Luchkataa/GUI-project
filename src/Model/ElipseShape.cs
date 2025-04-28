@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Draw.src.Model
 {
@@ -13,6 +14,10 @@ namespace Draw.src.Model
         {
             base.DrawSelf(grfx);
 
+            GraphicsState state = grfx.Save();
+
+            grfx.MultiplyTransform(this.TransformMatrix);
+
             using (SolidBrush brush = new SolidBrush(Color.FromArgb(128, FillColor)))
             {
                 grfx.FillEllipse(brush, Rectangle);
@@ -20,8 +25,10 @@ namespace Draw.src.Model
 
             using (Pen borderPen = new Pen(BorderColor, BorderWidth))
             {
-                grfx.DrawEllipse(borderPen, Rectangle);
+                grfx.DrawEllipse(borderPen, Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
             }
+
+            grfx.Restore(state);
         }
 
         public override bool Contains(PointF point)

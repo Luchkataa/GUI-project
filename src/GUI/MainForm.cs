@@ -154,5 +154,18 @@ namespace Draw
                 viewPort.Invalidate();
             }
         }
+
+        private void toolStripButton3_Click(object sender, EventArgs e) //rotate kopche
+        {
+            if (dialogProcessor.Selection != null)
+            {
+                dialogProcessor.Rotate(15); // Завърта избрания елемент с 15 градуса
+                viewPort.Invalidate(); // Прерисува екрана
+            }
+            else
+            {
+                MessageBox.Show("Няма избран елемент за завъртане.");
+            }
+        }
     }
 }
