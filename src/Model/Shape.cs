@@ -65,11 +65,19 @@ namespace Draw
 			get { return Rectangle.Location; }
 			set { rectangle.Location = value; }
 		}
-		
-		/// <summary>
-		/// Цвят на елемента.
-		/// </summary>
-		private Color fillColor;		
+
+        public PointF GetCenter()
+        {
+            return new PointF(
+                Rectangle.X + Rectangle.Width / 2f,
+                Rectangle.Y + Rectangle.Height / 2f
+            );
+        }
+
+        /// <summary>
+        /// Цвят на елемента.
+        /// </summary>
+        private Color fillColor;
 		public virtual Color FillColor {
 			get { return fillColor; }
 			set { fillColor = value; }

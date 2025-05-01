@@ -22,16 +22,17 @@ namespace Draw
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
-			//
-			// TODO: Add constructor code after the InitializeComponent() call.
-			//
-		}
 
-		/// <summary>
-		/// Изход от програмата. Затваря главната форма, а с това и програмата.
-		/// </summary>
-		void ExitToolStripMenuItemClick(object sender, EventArgs e)
+            viewPort.MouseWheel += ViewPortMouseWheel;
+            viewPort.Focus();
+            viewPort.TabStop = true;
+
+        }
+
+        /// <summary>
+        /// Изход от програмата. Затваря главната форма, а с това и програмата.
+        /// </summary>
+        void ExitToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			Close();
 		}
@@ -105,6 +106,30 @@ namespace Draw
 		{
 			dialogProcessor.IsDragging = false;
 		}
+
+        /// <summary>
+		/// Мащабиране на примитив чрез мишката.
+		/// Излизаме от режим мащабиране.
+		/// </summary>
+        private void ViewPortMouseWheel(object sender, MouseEventArgs e)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control) && dialogProcessor.Selection != null)
+            {
+                float scaleFactor = e.Delta > 0 ? 1.1f : 0.9f;
+
+                dialogProcessor.ScaleAt(scaleFactor, scaleFactor, dialogProcessor.Selection.GetCenter());
+
+                statusBar.Items[0].Text = "Последно действие: Мащабиране с мишката";
+            }
+            else if (ModifierKeys.HasFlag(Keys.Shift) && dialogProcessor.Selection != null)
+            {
+                float angle = e.Delta > 0 ? 10f : -10f;
+                dialogProcessor.Rotate(angle);
+                statusBar.Items[0].Text = "Последно действие: Завъртане с мишката";
+            }
+
+            viewPort.Invalidate();
+        }
 
         private void Ellipse_Click(object sender, EventArgs e)
         {

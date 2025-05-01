@@ -188,5 +188,17 @@ namespace Draw
             }
         }
 
+        public void ScaleAt(float scaleX, float scaleY, PointF center)
+        {
+            if (Selection != null)
+            {
+                Matrix transform = Selection.TransformMatrix.Clone();
+                transform.Translate(-center.X, -center.Y, MatrixOrder.Append);
+                transform.Scale(scaleX, scaleY, MatrixOrder.Append);
+                transform.Translate(center.X, center.Y, MatrixOrder.Append);
+                Selection.TransformMatrix = transform;
+            }
+        }
+
     }
 }
