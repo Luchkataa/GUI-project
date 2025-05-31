@@ -37,7 +37,7 @@ namespace Draw
 		/// <summary>
 		/// Прерисува всички елементи в shapeList върху e.Graphics
 		/// </summary>
-		public void ReDraw(object sender, PaintEventArgs e)
+		public virtual void ReDraw(object sender, PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 			Draw(e.Graphics);

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Windows.Forms;
 using Draw.src.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
@@ -16,24 +19,25 @@ namespace Draw
 		public DialogProcessor()
 		{
 		}
-		
-		#endregion
-		
-		#region Properties
-		
-		/// <summary>
-		/// Избран елемент.
-		/// </summary>
-		private Shape selection;
-		public Shape Selection {
-			get { return selection; }
-			set { selection = value; }
-		}
-		
-		/// <summary>
-		/// Дали в момента диалога е в състояние на "влачене" на избрания елемент.
-		/// </summary>
-		private bool isDragging;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Избран елемент.
+        /// </summary>
+        private List<Shape> selection = new List<Shape>();
+        public List<Shape> Selection
+        {
+            get { return selection; }
+            set { selection = value; }
+        }
+
+        /// <summary>
+        /// Дали в момента диалога е в състояние на "влачене" на избрания елемент.
+        /// </summary>
+        private bool isDragging;
 		public bool IsDragging {
 			get { return isDragging; }
 			set { isDragging = value; }
@@ -143,27 +147,33 @@ namespace Draw
 			}
 			return null;
 		}
-		
-		/// <summary>
-		/// Транслация на избраният елемент на вектор определен от <paramref name="p>p</paramref>
-		/// </summary>
-		/// <param name="p">Вектор на транслация.</param>
-		public void TranslateTo(PointF p)
-		{
-			if (selection != null) {
-				selection.Location = new PointF(selection.Location.X + p.X - lastLocation.X, selection.Location.Y + p.Y - lastLocation.Y);
-				lastLocation = p;
-			}
-		}
+
+        /// <summary>
+        /// Транслация на избраният елемент на вектор определен от <paramref name="p>p</paramref>
+        /// </summary>
+        /// <param name="p">Вектор на транслация.</param>
+        public void TranslateTo(PointF p)
+        {
+            float dx = p.X - lastLocation.X;
+            float dy = p.Y - lastLocation.Y;
+
+            foreach (var shape in Selection)
+            {
+                shape.Translate(dx, dy);
+            }
+
+            lastLocation = p;
+        }
+
         /// <summary>
         /// Променя цвета на контура на селектираната форма.
         /// </summary>
         /// <param name="color">Новият цвят на контура.</param>
         public void SetBorderColor(Color color)
         {
-            if (Selection != null)
+            foreach (var shape in Selection)
             {
-                Selection.BorderColor = color;
+                shape.BorderColor = color;
             }
         }
 
@@ -173,40 +183,95 @@ namespace Draw
         /// </summary>
         public void Rotate(float angle)
         {
-            if (Selection != null)
+            foreach (var shape in Selection)
             {
-                Matrix rotateMatrix = Selection.TransformMatrix.Clone();
+                Matrix rotateMatrix = shape.TransformMatrix.Clone();
 
                 PointF center = new PointF(
-                    Selection.Rectangle.Left + Selection.Rectangle.Width / 2,
-                    Selection.Rectangle.Top + Selection.Rectangle.Height / 2
+                    shape.Rectangle.Left + shape.Rectangle.Width / 2,
+                    shape.Rectangle.Top + shape.Rectangle.Height / 2
                 );
 
                 rotateMatrix.RotateAt(angle, center);
-
-                Selection.TransformMatrix = rotateMatrix;
+                shape.TransformMatrix = rotateMatrix;
             }
         }
 
         public void ScaleAt(float scaleX, float scaleY, PointF center)
         {
-            if (Selection != null)
+            foreach (var shape in Selection)
             {
-                Matrix transform = Selection.TransformMatrix.Clone();
+                Matrix transform = shape.TransformMatrix.Clone();
                 transform.Translate(-center.X, -center.Y, MatrixOrder.Append);
                 transform.Scale(scaleX, scaleY, MatrixOrder.Append);
                 transform.Translate(center.X, center.Y, MatrixOrder.Append);
-                Selection.TransformMatrix = transform;
+                shape.TransformMatrix = transform;
             }
+        }
+
+        public override void ReDraw(object sender, PaintEventArgs e)
+        {
+            base.ReDraw(sender, e);
+
+            using (Pen selectionPen = new Pen(Color.Red))
+            {
+                selectionPen.DashStyle = DashStyle.Dash;
+
+                foreach (var shape in Selection)
+                {
+                    RectangleF bounds = shape.GetTransformedBounds();
+                    e.Graphics.DrawRectangle(selectionPen, Rectangle.Round(bounds));
+                }
+            }
+        }
+        public void GroupSelectedShapes()
+        {
+            if (Selection.Count <= 1) return;
+
+            GroupShape group = new GroupShape();
+
+            foreach (var shape in Selection)
+            {
+                group.SubShapes.Add(shape);
+            }
+
+            foreach (var shape in group.SubShapes)
+            {
+                ShapeList.Remove(shape);
+            }
+
+            ShapeList.Add(group);
+            Selection.Clear();
+            Selection.Add(group);
+        }
+
+        public void UngroupSelectedShape()
+        {
+            if (Selection.Count != 1 || !(Selection[0] is GroupShape group))
+                return;
+
+            ShapeList.Remove(group);
+
+            foreach (var shape in group.SubShapes)
+            {
+                ShapeList.Add(shape);
+            }
+
+            Selection.Clear();
+            Selection.AddRange(group.SubShapes);
         }
 
         public void DeleteSelected()
         {
-            if (Selection != null && ShapeList.Contains(Selection))
+            foreach (var shape in Selection.ToList())
             {
-                ShapeList.Remove(Selection);
-                Selection = null;
+                if (ShapeList.Contains(shape))
+                {
+                    ShapeList.Remove(shape);
+                }
             }
+
+            Selection.Clear();
         }
 
     }

@@ -40,6 +40,12 @@ namespace Draw.src.Model
 
         public override bool Contains(PointF point)
         {
+            PointF[] pts = new PointF[] { point };
+            Matrix inverse = TransformMatrix.Clone();
+            inverse.Invert();
+            inverse.TransformPoints(pts);
+            PointF localPoint = pts[0];
+
             float topWidth = Width * 0.5f;
             float bottomWidth = Width;
 
@@ -54,9 +60,10 @@ namespace Draw.src.Model
             using (GraphicsPath path = new GraphicsPath())
             {
                 path.AddPolygon(points);
-                return path.IsVisible(point);
+                return path.IsVisible(localPoint);
             }
         }
+
 
     }
 }

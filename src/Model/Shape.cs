@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 
 namespace Draw
 {
@@ -66,7 +67,7 @@ namespace Draw
 			set { rectangle.Location = value; }
 		}
 
-        public PointF GetCenter()
+        public virtual PointF GetCenter()
         {
             return new PointF(
                 Rectangle.X + Rectangle.Width / 2f,
@@ -123,8 +124,14 @@ namespace Draw
         /// false, ако не пренадлежи</returns>
         public virtual bool Contains(PointF point)
 		{
-			return Rectangle.Contains(point.X, point.Y);
-		}
+            PointF[] pts = new PointF[] { point };
+
+            Matrix inverse = TransformMatrix.Clone();
+            inverse.Invert();
+            inverse.TransformPoints(pts);
+
+            return Rectangle.Contains(pts[0]);
+        }
 		
 		/// <summary>
 		/// Визуализира елемента.
@@ -134,6 +141,52 @@ namespace Draw
 		{
 			// shape.Rectangle.Inflate(shape.BorderWidth, shape.BorderWidth);
 		}
-		
-	}
+
+        public RectangleF GetTransformedBounds()
+        {
+            PointF[] corners = new PointF[]
+            {
+        new PointF(Rectangle.Left, Rectangle.Top),
+        new PointF(Rectangle.Right, Rectangle.Top),
+        new PointF(Rectangle.Right, Rectangle.Bottom),
+        new PointF(Rectangle.Left, Rectangle.Bottom)
+            };
+
+            TransformMatrix.TransformPoints(corners);
+
+            float minX = corners.Min(p => p.X);
+            float maxX = corners.Max(p => p.X);
+            float minY = corners.Min(p => p.Y);
+            float maxY = corners.Max(p => p.Y);
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        public virtual void Translate(float dx, float dy)
+        {
+            TransformMatrix.Translate(dx, dy, MatrixOrder.Append);
+            Rectangle = new RectangleF(Rectangle.X + dx, Rectangle.Y + dy, Rectangle.Width, Rectangle.Height);
+        }
+        public virtual void Rotate(float angle, PointF center)
+        {
+            TransformMatrix.RotateAt(angle, center, MatrixOrder.Append);
+        }
+
+        public virtual void Scale(float scaleX, float scaleY, PointF center)
+        {
+            TransformMatrix.Translate(-center.X, -center.Y, MatrixOrder.Append);
+            TransformMatrix.Scale(scaleX, scaleY, MatrixOrder.Append);
+            TransformMatrix.Translate(center.X, center.Y, MatrixOrder.Append);
+        }
+
+        public virtual void Rotate(float angle)
+        {
+            Rotate(angle, GetCenter());
+        }
+
+        public virtual void Scale(float scaleX, float scaleY)
+        {
+            Scale(scaleX, scaleY, GetCenter());
+        }
+    }
 }

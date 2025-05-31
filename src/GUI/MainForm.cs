@@ -66,6 +66,7 @@ namespace Draw
 
             viewPort.Invalidate();
         }
+
         /// <summary>
         /// Прихващане на координатите при натискането на бутон на мишката и проверка (в обратен ред) дали не е
         /// щракнато върху елемент. Ако е така то той се отбелязва като селектиран и започва процес на "влачене".
@@ -74,22 +75,38 @@ namespace Draw
         /// </summary>
         void ViewPortMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
-			if (pickUpSpeedButton.Checked) {
-				dialogProcessor.Selection = dialogProcessor.ContainsPoint(e.Location);
-				if (dialogProcessor.Selection != null) {
-					statusBar.Items[0].Text = "Последно действие: Селекция на примитив";
-					dialogProcessor.IsDragging = true;
-					dialogProcessor.LastLocation = e.Location;
-					viewPort.Invalidate();
-				}
-			}
-		}
+            if (pickUpSpeedButton.Checked)
+            {
+                Shape clickedShape = dialogProcessor.ContainsPoint(e.Location);
+                if (clickedShape != null)
+                {
+                    if (ModifierKeys.HasFlag(Keys.Control))
+                    {
+                        if (dialogProcessor.Selection.Contains(clickedShape))
+                            dialogProcessor.Selection.Remove(clickedShape);
+                        else
+                            dialogProcessor.Selection.Add(clickedShape);
+                    }
+                    else
+                    {
+                        dialogProcessor.Selection.Clear();
+                        dialogProcessor.Selection.Add(clickedShape);
+                    }
 
-		/// <summary>
-		/// Прихващане на преместването на мишката.
-		/// Ако сме в режм на "влачене", то избрания елемент се транслира.
-		/// </summary>
-		void ViewPortMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+                    statusBar.Items[0].Text = "Последно действие: Селекция";
+                    dialogProcessor.IsDragging = true;
+                    dialogProcessor.LastLocation = e.Location;
+                    viewPort.Invalidate();
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Прихващане на преместването на мишката.
+        /// Ако сме в режм на "влачене", то избрания елемент се транслира.
+        /// </summary>
+        void ViewPortMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
 			if (dialogProcessor.IsDragging) {
 				if (dialogProcessor.Selection != null) statusBar.Items[0].Text = "Последно действие: Влачене";
@@ -113,23 +130,50 @@ namespace Draw
 		/// </summary>
         private void ViewPortMouseWheel(object sender, MouseEventArgs e)
         {
-            if (ModifierKeys.HasFlag(Keys.Control) && dialogProcessor.Selection != null)
+            if (dialogProcessor.Selection.Count > 0)
             {
-                float scaleFactor = e.Delta > 0 ? 1.1f : 0.9f;
+                if (ModifierKeys.HasFlag(Keys.Control))
+                {
+                    float scaleFactor = e.Delta > 0 ? 1.1f : 0.9f;
 
-                dialogProcessor.ScaleAt(scaleFactor, scaleFactor, dialogProcessor.Selection.GetCenter());
+                    var center = GetSelectionCenter();
+                    dialogProcessor.ScaleAt(scaleFactor, scaleFactor, center);
 
-                statusBar.Items[0].Text = "Последно действие: Мащабиране с мишката";
+                    statusBar.Items[0].Text = "Последно действие: Мащабиране с мишката";
+                }
+                else if (ModifierKeys.HasFlag(Keys.Shift))
+                {
+                    float angle = e.Delta > 0 ? 10f : -10f;
+                    dialogProcessor.Rotate(angle);
+                    statusBar.Items[0].Text = "Последно действие: Завъртане с мишката";
+                }
+
+                viewPort.Invalidate();
             }
-            else if (ModifierKeys.HasFlag(Keys.Shift) && dialogProcessor.Selection != null)
-            {
-                float angle = e.Delta > 0 ? 10f : -10f;
-                dialogProcessor.Rotate(angle);
-                statusBar.Items[0].Text = "Последно действие: Завъртане с мишката";
-            }
-
-            viewPort.Invalidate();
         }
+
+        private PointF GetSelectionCenter()
+        {
+            if (dialogProcessor.Selection.Count == 0)
+                return PointF.Empty;
+
+            float minX = float.MaxValue;
+            float minY = float.MaxValue;
+            float maxX = float.MinValue;
+            float maxY = float.MinValue;
+
+            foreach (var shape in dialogProcessor.Selection)
+            {
+                var bounds = shape.GetTransformedBounds();
+                if (bounds.Left < minX) minX = bounds.Left;
+                if (bounds.Top < minY) minY = bounds.Top;
+                if (bounds.Right > maxX) maxX = bounds.Right;
+                if (bounds.Bottom > maxY) maxY = bounds.Bottom;
+            }
+
+            return new PointF((minX + maxX) / 2, (minY + maxY) / 2);
+        }
+
 
         private void Ellipse_Click(object sender, EventArgs e)
         {
@@ -160,22 +204,28 @@ namespace Draw
 
         private void toolStripButton2_Click(object sender, EventArgs e) //Color Picker
         {
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            if (colorDialog1.ShowDialog() == DialogResult.OK && dialogProcessor.Selection.Count > 0)
             {
-                if (dialogProcessor.Selection != null)
+                foreach (var shape in dialogProcessor.Selection)
                 {
-                    dialogProcessor.Selection.BorderColor = colorDialog1.Color;
-                    statusBar.Items[0].Text = "Последно действие: Промяна на цвета на фигурата";
-                    viewPort.Invalidate();
+                    shape.BorderColor = colorDialog1.Color;
                 }
+
+                statusBar.Items[0].Text = "Последно действие: Промяна на цвета на фигура(и)";
+                viewPort.Invalidate();
             }
         }
 
+
         private void trackBarBorderWidth_Scroll(object sender, EventArgs e)
         {
-            if (dialogProcessor.Selection != null)
+            if (dialogProcessor.Selection.Count > 0)
             {
-                dialogProcessor.Selection.BorderWidth = trackBarBorderWidth.Value;
+                foreach (var shape in dialogProcessor.Selection)
+                {
+                    shape.BorderWidth = trackBarBorderWidth.Value;
+                }
+
                 viewPort.Invalidate();
             }
         }
@@ -205,6 +255,18 @@ namespace Draw
             {
                 MessageBox.Show("Няма избран примитив за изтриване.");
             }
+        }
+
+        private void GroupShape_Click(object sender, EventArgs e)
+        {
+            dialogProcessor.GroupSelectedShapes();
+            viewPort.Invalidate();
+        }
+
+        private void UngroupShape_Click(object sender, EventArgs e)
+        {
+            dialogProcessor.UngroupSelectedShape();
+            viewPort.Invalidate();
         }
     }
 }

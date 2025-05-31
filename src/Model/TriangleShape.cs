@@ -43,18 +43,25 @@ namespace Draw.src.Model
 
         public override bool Contains(PointF point)
         {
+            PointF[] pts = new PointF[] { point };
+            Matrix inverse = TransformMatrix.Clone();
+            inverse.Invert();
+            inverse.TransformPoints(pts);
+            PointF localPoint = pts[0];
+
             var points = new PointF[]
             {
-                new PointF(Location.X + Width / 2, Location.Y),
-                new PointF(Location.X, Location.Y + Height),
-                new PointF(Location.X + Width, Location.Y + Height)
+                new PointF(Location.X + Width / 2, Location.Y),          // Top
+                new PointF(Location.X, Location.Y + Height),             // Left
+                new PointF(Location.X + Width, Location.Y + Height)      // Right
             };
 
             using (GraphicsPath path = new GraphicsPath())
             {
                 path.AddPolygon(points);
-                return path.IsVisible(point);
+                return path.IsVisible(localPoint);
             }
         }
+
     }
 }

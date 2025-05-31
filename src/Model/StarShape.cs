@@ -12,10 +12,16 @@ namespace Draw
 
         public override bool Contains(PointF point)
         {
+            PointF[] pts = new PointF[] { point };
+            Matrix inverse = TransformMatrix.Clone();
+            inverse.Invert();
+            inverse.TransformPoints(pts);
+            PointF localPoint = pts[0];
+
             using (GraphicsPath path = new GraphicsPath())
             {
                 path.AddPolygon(CalculateStarPoints(this.Rectangle));
-                return path.IsVisible(point);
+                return path.IsVisible(localPoint);
             }
         }
 

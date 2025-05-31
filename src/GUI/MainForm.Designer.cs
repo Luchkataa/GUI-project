@@ -47,10 +47,12 @@
             this.pickUpSpeedButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.DeleteButton = new System.Windows.Forms.ToolStripButton();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.trackBarBorderWidth = new System.Windows.Forms.TrackBar();
             this.viewPort = new Draw.DoubleBufferedPanel();
-            this.DeleteButton = new System.Windows.Forms.ToolStripButton();
+            this.GroupShape = new System.Windows.Forms.ToolStripButton();
+            this.UngroupShape = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.speedMenu.SuspendLayout();
@@ -137,6 +139,8 @@
             this.pickUpSpeedButton,
             this.toolStripButton2,
             this.toolStripButton3,
+            this.GroupShape,
+            this.UngroupShape,
             this.DeleteButton});
             this.speedMenu.Location = new System.Drawing.Point(0, 24);
             this.speedMenu.Name = "speedMenu";
@@ -224,6 +228,16 @@
             this.toolStripButton3.Text = "toolStripButton3";
             this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
+            // DeleteButton
+            // 
+            this.DeleteButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.DeleteButton.Image = ((System.Drawing.Image)(resources.GetObject("DeleteButton.Image")));
+            this.DeleteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(23, 22);
+            this.DeleteButton.Text = "toolStripButton4";
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
             // trackBarBorderWidth
             // 
             this.trackBarBorderWidth.Location = new System.Drawing.Point(538, 24);
@@ -244,15 +258,25 @@
             this.viewPort.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseMove);
             this.viewPort.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseUp);
             // 
-            // DeleteButton
+            // GroupShape
             // 
-            this.DeleteButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.DeleteButton.Image = ((System.Drawing.Image)(resources.GetObject("DeleteButton.Image")));
-            this.DeleteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(23, 22);
-            this.DeleteButton.Text = "toolStripButton4";
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            this.GroupShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.GroupShape.Image = ((System.Drawing.Image)(resources.GetObject("GroupShape.Image")));
+            this.GroupShape.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.GroupShape.Name = "GroupShape";
+            this.GroupShape.Size = new System.Drawing.Size(23, 22);
+            this.GroupShape.Text = "toolStripButton4";
+            this.GroupShape.Click += new System.EventHandler(this.GroupShape_Click);
+            // 
+            // UngroupShape
+            // 
+            this.UngroupShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.UngroupShape.Image = ((System.Drawing.Image)(resources.GetObject("UngroupShape.Image")));
+            this.UngroupShape.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.UngroupShape.Name = "UngroupShape";
+            this.UngroupShape.Size = new System.Drawing.Size(23, 22);
+            this.UngroupShape.Text = "toolStripButton4";
+            this.UngroupShape.Click += new System.EventHandler(this.UngroupShape_Click);
             // 
             // MainForm
             // 
@@ -303,5 +327,7 @@
         private System.Windows.Forms.TrackBar trackBarBorderWidth;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton DeleteButton;
+        private System.Windows.Forms.ToolStripButton GroupShape;
+        private System.Windows.Forms.ToolStripButton UngroupShape;
     }
 }

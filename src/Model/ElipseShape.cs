@@ -33,13 +33,22 @@ namespace Draw.src.Model
 
         public override bool Contains(PointF point)
         {
-            float a = Width / 2;   // Полу-голяма ос
-            float b = Height / 2;  // Полу-малка ос
+            PointF[] pts = new PointF[] { point };
+
+            Matrix inverse = TransformMatrix.Clone();
+            inverse.Invert();
+            inverse.TransformPoints(pts);
+
+            PointF localPoint = pts[0];
+
+            float a = Width / 2f;   // Полу-голяма ос
+            float b = Height / 2f;  // Полу-малка ос
             float centerX = Location.X + a;
             float centerY = Location.Y + b;
 
-            float normalizedX = (point.X - centerX) / a;
-            float normalizedY = (point.Y - centerY) / b;
+            // if point in elipse
+            float normalizedX = (localPoint.X - centerX) / a;
+            float normalizedY = (localPoint.Y - centerY) / b;
 
             return (normalizedX * normalizedX + normalizedY * normalizedY) <= 1;
         }
