@@ -192,5 +192,19 @@ namespace Draw
                 MessageBox.Show("Няма избран елемент за завъртане.");
             }
         }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (dialogProcessor.Selection != null)
+            {
+                dialogProcessor.DeleteSelected();
+                statusBar.Items[0].Text = "Последно действие: Изтриване на примитив";
+                viewPort.Invalidate();
+            }
+            else
+            {
+                MessageBox.Show("Няма избран примитив за изтриване.");
+            }
+        }
     }
 }

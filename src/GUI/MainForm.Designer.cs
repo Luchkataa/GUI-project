@@ -46,10 +46,11 @@
             this.Trapezoid = new System.Windows.Forms.ToolStripButton();
             this.pickUpSpeedButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.trackBarBorderWidth = new System.Windows.Forms.TrackBar();
             this.viewPort = new Draw.DoubleBufferedPanel();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.DeleteButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.speedMenu.SuspendLayout();
@@ -135,7 +136,8 @@
             this.Trapezoid,
             this.pickUpSpeedButton,
             this.toolStripButton2,
-            this.toolStripButton3});
+            this.toolStripButton3,
+            this.DeleteButton});
             this.speedMenu.Location = new System.Drawing.Point(0, 24);
             this.speedMenu.Name = "speedMenu";
             this.speedMenu.Size = new System.Drawing.Size(693, 25);
@@ -212,6 +214,16 @@
             this.toolStripButton2.Text = "toolStripButton2";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Text = "toolStripButton3";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
             // trackBarBorderWidth
             // 
             this.trackBarBorderWidth.Location = new System.Drawing.Point(538, 24);
@@ -232,15 +244,15 @@
             this.viewPort.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseMove);
             this.viewPort.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseUp);
             // 
-            // toolStripButton3
+            // DeleteButton
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.DeleteButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.DeleteButton.Image = ((System.Drawing.Image)(resources.GetObject("DeleteButton.Image")));
+            this.DeleteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(23, 22);
+            this.DeleteButton.Text = "toolStripButton4";
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // MainForm
             // 
@@ -290,5 +302,6 @@
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.TrackBar trackBarBorderWidth;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton DeleteButton;
     }
 }

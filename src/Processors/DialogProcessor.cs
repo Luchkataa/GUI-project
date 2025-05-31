@@ -200,5 +200,14 @@ namespace Draw
             }
         }
 
+        public void DeleteSelected()
+        {
+            if (Selection != null && ShapeList.Contains(Selection))
+            {
+                ShapeList.Remove(Selection);
+                Selection = null;
+            }
+        }
+
     }
 }
