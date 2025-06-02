@@ -2,24 +2,29 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Draw
 {
-	/// <summary>
-	/// Базовия клас на примитивите, който съдържа общите характеристики на примитивите.
-	/// </summary>
-	public abstract class Shape
-	{
+    /// <summary>
+    /// Базовия клас на примитивите, който съдържа общите характеристики на примитивите.
+    /// </summary>
+
+    [Serializable]
+    public abstract class Shape : IDeserializationCallback
+    {
 		#region Constructors
 		
 		public Shape()
 		{
-		}
+            transformMatrix = new Matrix();
+        }
 		
 		public Shape(RectangleF rect)
 		{
 			rectangle = rect;
-		}
+            transformMatrix = new Matrix();
+        }
 		
 		public Shape(Shape shape)
 		{
@@ -29,7 +34,8 @@ namespace Draw
 			this.rectangle = shape.rectangle;
 			
 			this.FillColor =  shape.FillColor;
-		}
+            this.TransformMatrixElements = shape.TransformMatrixElements;
+        }
 		#endregion
 		
 		#region Properties
@@ -104,14 +110,34 @@ namespace Draw
             set { borderWidth = value; }
         }
 
-        /// <summary>
-        /// Въртене на примитив.
-        /// </summary>
-        private Matrix transformMatrix = new Matrix();
+        [NonSerialized]
+        private Matrix transformMatrix;
+
         public virtual Matrix TransformMatrix
         {
             get { return transformMatrix; }
             set { transformMatrix = value; }
+        }
+
+        private float[] transformMatrixElements;
+
+        public float[] TransformMatrixElements
+        {
+            get
+            {
+                if (transformMatrix != null)
+                    return transformMatrix.Elements;
+                else
+                    return transformMatrixElements;
+            }
+            set
+            {
+                transformMatrixElements = value;
+                if (value != null && value.Length == 6)
+                    transformMatrix = new Matrix(value[0], value[1], value[2], value[3], value[4], value[5]);
+                else
+                    transformMatrix = new Matrix();
+            }
         }
         #endregion
 
@@ -165,7 +191,6 @@ namespace Draw
         public virtual void Translate(float dx, float dy)
         {
             TransformMatrix.Translate(dx, dy, MatrixOrder.Append);
-            Rectangle = new RectangleF(Rectangle.X + dx, Rectangle.Y + dy, Rectangle.Width, Rectangle.Height);
         }
         public virtual void Rotate(float angle, PointF center)
         {
@@ -187,6 +212,24 @@ namespace Draw
         public virtual void Scale(float scaleX, float scaleY)
         {
             Scale(scaleX, scaleY, GetCenter());
+        }
+
+        public void OnDeserialization(object sender)
+        {
+            if (transformMatrix == null)
+            {
+                if (transformMatrixElements != null && transformMatrixElements.Length == 6)
+                {
+                    transformMatrix = new Matrix(
+                        transformMatrixElements[0], transformMatrixElements[1],
+                        transformMatrixElements[2], transformMatrixElements[3],
+                        transformMatrixElements[4], transformMatrixElements[5]);
+                }
+                else
+                {
+                    transformMatrix = new Matrix();
+                }
+            }
         }
     }
 }

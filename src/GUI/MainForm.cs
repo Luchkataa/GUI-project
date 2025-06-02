@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Draw
 {
@@ -267,6 +269,98 @@ namespace Draw
         {
             dialogProcessor.UngroupSelectedShape();
             viewPort.Invalidate();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "Draw files (*.drw)|*.drw|All files (*.*)|*.*";
+                saveFileDialog.Title = "Save Drawing";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.Create))
+                        {
+                            BinaryFormatter formatter = new BinaryFormatter();
+                            formatter.Serialize(fs, dialogProcessor.ShapeList);
+                        }
+
+                        MessageBox.Show("File saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error saving file:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void exportAsImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bitmap = new Bitmap(viewPort.Width, viewPort.Height);
+
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                viewPort.DrawToBitmap(bitmap, new Rectangle(0, 0, viewPort.Width, viewPort.Height));
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Image Files (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png|All files (*.*)|*.*";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var extension = Path.GetExtension(saveFileDialog.FileName).ToLower();
+                switch (extension)
+                {
+                    case ".bmp":
+                        bitmap.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                        break;
+                    case ".jpg":
+                    case ".jpeg":
+                        bitmap.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        break;
+                    case ".png":
+                        bitmap.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        break;
+                    default:
+                        bitmap.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        break;
+                }
+            }
+
+            bitmap.Dispose();
+        }
+
+        private void loadFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Draw files (*.drw)|*.drw|All files (*.*)|*.*";
+                openFileDialog.Title = "Open Drawing";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open))
+                        {
+                            BinaryFormatter formatter = new BinaryFormatter();
+                            dialogProcessor.ShapeList = (List<Shape>)formatter.Deserialize(fs);
+                        }
+
+                        viewPort.Invalidate();
+
+                        MessageBox.Show("File loaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error loading file:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
     }
 }

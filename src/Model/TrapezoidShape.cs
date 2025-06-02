@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace Draw.src.Model
 {
+    [Serializable]
     public class TrapezoidShape : Shape
     {
         public TrapezoidShape(Rectangle rect) : base(rect)

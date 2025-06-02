@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 
 namespace Draw.src.Model
 {
+    [Serializable]
     public class GroupShape : Shape
     {
         public List<Shape> SubShapes { get; set; } = new List<Shape>();

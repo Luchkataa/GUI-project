@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Draw.src.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
@@ -213,7 +215,7 @@ namespace Draw
         {
             base.ReDraw(sender, e);
 
-            using (Pen selectionPen = new Pen(Color.Red))
+            using (Pen selectionPen = new Pen(Color.DarkBlue))
             {
                 selectionPen.DashStyle = DashStyle.Dash;
 

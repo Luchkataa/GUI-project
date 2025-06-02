@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace Draw
 {
+    [Serializable]
     public class StarShape : Shape
     {
         public StarShape(RectangleF rect) : base(rect)

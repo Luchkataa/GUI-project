@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace Draw.src.Model
 {
+    [Serializable]
     public class ElipseShape : Shape
     {
         public ElipseShape(Rectangle rect) : base(rect)

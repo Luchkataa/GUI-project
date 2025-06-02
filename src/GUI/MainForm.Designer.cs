@@ -32,10 +32,13 @@
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAsImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.currentStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.speedMenu = new System.Windows.Forms.ToolStrip();
@@ -47,12 +50,12 @@
             this.pickUpSpeedButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.GroupShape = new System.Windows.Forms.ToolStripButton();
+            this.UngroupShape = new System.Windows.Forms.ToolStripButton();
             this.DeleteButton = new System.Windows.Forms.ToolStripButton();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.trackBarBorderWidth = new System.Windows.Forms.TrackBar();
             this.viewPort = new Draw.DoubleBufferedPanel();
-            this.GroupShape = new System.Windows.Forms.ToolStripButton();
-            this.UngroupShape = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.speedMenu.SuspendLayout();
@@ -65,7 +68,8 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.imageToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.loadFileToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Size = new System.Drawing.Size(693, 24);
@@ -75,7 +79,9 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.exportAsImageToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -83,9 +89,23 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // exportAsImageToolStripMenuItem
+            // 
+            this.exportAsImageToolStripMenuItem.Name = "exportAsImageToolStripMenuItem";
+            this.exportAsImageToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.exportAsImageToolStripMenuItem.Text = "Export As Image";
+            this.exportAsImageToolStripMenuItem.Click += new System.EventHandler(this.exportAsImageToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -112,6 +132,13 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "About...";
+            // 
+            // loadFileToolStripMenuItem
+            // 
+            this.loadFileToolStripMenuItem.Name = "loadFileToolStripMenuItem";
+            this.loadFileToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.loadFileToolStripMenuItem.Text = "Load File";
+            this.loadFileToolStripMenuItem.Click += new System.EventHandler(this.loadFileToolStripMenuItem_Click);
             // 
             // statusBar
             // 
@@ -228,6 +255,26 @@
             this.toolStripButton3.Text = "toolStripButton3";
             this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
+            // GroupShape
+            // 
+            this.GroupShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.GroupShape.Image = ((System.Drawing.Image)(resources.GetObject("GroupShape.Image")));
+            this.GroupShape.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.GroupShape.Name = "GroupShape";
+            this.GroupShape.Size = new System.Drawing.Size(23, 22);
+            this.GroupShape.Text = "toolStripButton4";
+            this.GroupShape.Click += new System.EventHandler(this.GroupShape_Click);
+            // 
+            // UngroupShape
+            // 
+            this.UngroupShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.UngroupShape.Image = ((System.Drawing.Image)(resources.GetObject("UngroupShape.Image")));
+            this.UngroupShape.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.UngroupShape.Name = "UngroupShape";
+            this.UngroupShape.Size = new System.Drawing.Size(23, 22);
+            this.UngroupShape.Text = "toolStripButton4";
+            this.UngroupShape.Click += new System.EventHandler(this.UngroupShape_Click);
+            // 
             // DeleteButton
             // 
             this.DeleteButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -257,26 +304,6 @@
             this.viewPort.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseDown);
             this.viewPort.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseMove);
             this.viewPort.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ViewPortMouseUp);
-            // 
-            // GroupShape
-            // 
-            this.GroupShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.GroupShape.Image = ((System.Drawing.Image)(resources.GetObject("GroupShape.Image")));
-            this.GroupShape.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.GroupShape.Name = "GroupShape";
-            this.GroupShape.Size = new System.Drawing.Size(23, 22);
-            this.GroupShape.Text = "toolStripButton4";
-            this.GroupShape.Click += new System.EventHandler(this.GroupShape_Click);
-            // 
-            // UngroupShape
-            // 
-            this.UngroupShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.UngroupShape.Image = ((System.Drawing.Image)(resources.GetObject("UngroupShape.Image")));
-            this.UngroupShape.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.UngroupShape.Name = "UngroupShape";
-            this.UngroupShape.Size = new System.Drawing.Size(23, 22);
-            this.UngroupShape.Text = "toolStripButton4";
-            this.UngroupShape.Click += new System.EventHandler(this.UngroupShape_Click);
             // 
             // MainForm
             // 
@@ -329,5 +356,8 @@
         private System.Windows.Forms.ToolStripButton DeleteButton;
         private System.Windows.Forms.ToolStripButton GroupShape;
         private System.Windows.Forms.ToolStripButton UngroupShape;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportAsImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadFileToolStripMenuItem;
     }
 }
