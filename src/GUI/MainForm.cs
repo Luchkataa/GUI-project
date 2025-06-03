@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Draw
 {
+
 	public partial class MainForm : Form
 	{
 		private DialogProcessor dialogProcessor = new DialogProcessor();
