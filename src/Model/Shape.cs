@@ -30,7 +30,7 @@ namespace Draw
 			this.rectangle = shape.rectangle;
 			
 			this.FillColor =  shape.FillColor;
-            this.TransformMatrixElements = shape.TransformMatrixElements;
+            this.transformMatrixElements = shape.transformMatrixElements;
         }
 		#endregion
 		
@@ -115,24 +115,24 @@ namespace Draw
             set { transformMatrix = value; }
         }
 
-        private float[] transformMatrixElements;
+        public float[] transformMatrixElements { get; set; } = new float[6];
 
-        public float[] TransformMatrixElements
+        [OnSerializing]
+        private void OnSerializing(StreamingContext context)
         {
-            get
+            transformMatrixElements = transformMatrix?.Elements ?? new float[6];
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            transformMatrix = new Matrix();
+            if (transformMatrixElements != null && transformMatrixElements.Length == 6)
             {
-                if (transformMatrix != null)
-                    return transformMatrix.Elements;
-                else
-                    return transformMatrixElements;
-            }
-            set
-            {
-                transformMatrixElements = value;
-                if (value != null && value.Length == 6)
-                    transformMatrix = new Matrix(value[0], value[1], value[2], value[3], value[4], value[5]);
-                else
-                    transformMatrix = new Matrix();
+                transformMatrix = new Matrix(
+                    transformMatrixElements[0], transformMatrixElements[1],
+                    transformMatrixElements[2], transformMatrixElements[3],
+                    transformMatrixElements[4], transformMatrixElements[5]);
             }
         }
         #endregion
