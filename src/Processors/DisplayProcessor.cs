@@ -6,9 +6,6 @@ using System.Drawing.Drawing2D;
 
 namespace Draw
 {
-	/// <summary>
-	/// Класът, който ще бъде използван при управляване на дисплейната система.
-	/// </summary>
 	public class DisplayProcessor
 	{
 		#region Constructor

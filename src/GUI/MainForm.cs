@@ -7,15 +7,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Draw
 {
-	/// <summary>
-	/// Върху главната форма е поставен потребителски контрол,
-	/// в който се осъществява визуализацията
-	/// </summary>
 	public partial class MainForm : Form
 	{
-		/// <summary>
-		/// Агрегирания диалогов процесор във формата улеснява манипулацията на модела.
-		/// </summary>
 		private DialogProcessor dialogProcessor = new DialogProcessor();
 		
 		public MainForm()
@@ -236,8 +229,8 @@ namespace Draw
         {
             if (dialogProcessor.Selection != null)
             {
-                dialogProcessor.Rotate(15); // Завърта избрания елемент с 15 градуса
-                viewPort.Invalidate(); // Прерисува екрана
+                dialogProcessor.Rotate(15);
+                viewPort.Invalidate();
             }
             else
             {

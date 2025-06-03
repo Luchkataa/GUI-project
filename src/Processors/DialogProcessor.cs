@@ -11,9 +11,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Draw
 {
-	/// <summary>
-	/// Класът, който ще бъде използван при управляване на диалога.
-	/// </summary>
 	public class DialogProcessor : DisplayProcessor
 	{
 		#region Constructor
