@@ -129,6 +129,21 @@ namespace Draw
             ShapeList.Add(trapezoid);
         }
 
+        public void AddRandomCircle()
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(100, 1000);
+            int y = rnd.Next(100, 600);
+
+            CrossXCircleShape circle = new CrossXCircleShape(new RectangleF(x, y, 100, 200))
+            {
+                FillColor = Color.Pink,
+                BorderColor = Color.Black
+            };
+
+            ShapeList.Add(circle);
+        }
+
         /// <summary>
         /// Проверява дали дадена точка е в елемента.
         /// Обхожда в ред обратен на визуализацията с цел намиране на

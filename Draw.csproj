@@ -74,6 +74,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\GUI\Program.cs" />
+    <Compile Include="src\Model\CrossXCircleShape.cs" />
     <Compile Include="src\Model\ElipseShape.cs" />
     <Compile Include="src\Model\GroupShape.cs" />
     <Compile Include="src\Model\RectangleShape.cs" />

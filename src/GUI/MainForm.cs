@@ -356,5 +356,13 @@ namespace Draw
                 }
             }
         }
+        private void DrawCircleWithXInMiddle_Click(object sender, EventArgs e)
+        {
+            dialogProcessor.AddRandomCircle();
+
+            statusBar.Items[0].Text = "Последно действие: Рисуване на кръг с Х в средата.";
+
+            viewPort.Invalidate();
+        }
     }
 }
